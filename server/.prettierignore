@@ -3,5 +3,6 @@ build
 coverage
 dist
 node_modules
+.migrations
 eslint.config.mjs
 docker-compose.yml
