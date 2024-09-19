@@ -1,3 +1,7 @@
 export function App() {
-  return <h1>Hello Orbit!</h1>
+  return (
+    <main className="h-screen bg-neutral-95">
+      <h1 className="text-primary-light text-xl font-bold">Hello Orbit!</h1>
+    </main>
+  )
 }
