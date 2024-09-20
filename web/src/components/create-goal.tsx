@@ -1,4 +1,8 @@
 import { X } from 'lucide-react'
+import { Controller, useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+
 import { Button } from './ui/button'
 import {
   DialogClose,
@@ -13,8 +17,43 @@ import {
   RadioGroupIndicator,
   RadioGroupItem,
 } from './ui/radio-group'
+import { createGoals } from '../http/create-goal'
+import { useQueryClient } from '@tanstack/react-query'
+
+const createGoalSchema = z.object({
+  title: z.string().min(1, 'Informe a atividade que deseja praticar'),
+  desiredWeeklyFrequency: z.coerce.number().min(1).max(7),
+})
+
+type CreateGoalSchema = z.infer<typeof createGoalSchema>
 
 export function CreateGoal() {
+  const queryClient = useQueryClient()
+
+  const desiredWeeklyFrequencyIcon = ['🥱', '🙂', '😎', '😜', '🤨', '🤯', '🔥']
+
+  const {
+    register,
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm<CreateGoalSchema>({
+    resolver: zodResolver(createGoalSchema),
+  })
+
+  async function handleCreateGoal({
+    title,
+    desiredWeeklyFrequency,
+  }: CreateGoalSchema) {
+    await createGoals({ title, desiredWeeklyFrequency })
+
+    reset()
+
+    queryClient.invalidateQueries({ queryKey: ['pending-goals'] })
+    queryClient.invalidateQueries({ queryKey: ['summary'] })
+  }
+
   return (
     <DialogContent>
       <div className="h-full flex flex-col gap-6">
@@ -33,35 +72,46 @@ export function CreateGoal() {
           </DialogDescription>
         </div>
 
-        <form className="flex-1 flex flex-col justify-between">
+        <form
+          onSubmit={handleSubmit(handleCreateGoal)}
+          className="flex-1 flex flex-col justify-between">
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-2">
               <Label htmlFor="title">Qual a atividade?</Label>
               <Input
                 autoFocus
                 id="title"
-                placeholder="Praticar exercícios, meditar, etc..."></Input>
+                placeholder="Praticar exercícios, meditar, etc..."
+                {...register('title')}
+              />
+
+              {errors.title && (
+                <p className="text-sm text-red-400">{errors.title.message}</p>
+              )}
             </div>
 
             <div className="flex flex-col gap-2">
               <Label>Quantas vezes na semana?</Label>
-              <RadioGroup>
-                <RadioGroupItem value="1">
-                  <RadioGroupIndicator />
-                  <span className="text-zinc-300 text-sm font-medium leading-none">
-                    1x na semana
-                  </span>
-                  <span className="text-lg leading-none">🥱</span>
-                </RadioGroupItem>
-
-                <RadioGroupItem value="2">
-                  <RadioGroupIndicator />
-                  <span className="text-zinc-300 text-sm font-medium leading-none">
-                    2x na semana
-                  </span>
-                  <span className="text-lg leading-none">🙂</span>
-                </RadioGroupItem>
-              </RadioGroup>
+              <Controller
+                control={control}
+                name="desiredWeeklyFrequency"
+                defaultValue={3}
+                render={({ field }) => (
+                  <RadioGroup
+                    onValueChange={field.onChange}
+                    value={String(field.value)}>
+                    {desiredWeeklyFrequencyIcon.map((icon, index) => (
+                      <RadioGroupItem value={String(index + 1)}>
+                        <RadioGroupIndicator />
+                        <span className="text-zinc-300 text-sm font-medium leading-none">
+                          {index + 1}x na semana
+                        </span>
+                        <span className="text-lg leading-none">{icon}</span>
+                      </RadioGroupItem>
+                    ))}
+                  </RadioGroup>
+                )}
+              />
             </div>
           </div>
 
