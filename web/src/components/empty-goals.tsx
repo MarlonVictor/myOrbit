@@ -12,7 +12,7 @@ export function EmptyGoals() {
 
       <img src={letsStart} alt="Lets start" />
 
-      <p className="to-zinc-300 leading-relaxed max-w-80 text-center">
+      <p className="text-zinc-300 leading-relaxed max-w-80 text-center">
         Você ainda não cadastrou nenhuma meta, que tal{' '}
         <span className="underline underline-offset-2">cadastrar um</span> agora
         mesmo?

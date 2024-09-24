@@ -54,6 +54,10 @@ export function CreateGoal() {
     queryClient.invalidateQueries({ queryKey: ['summary'] })
   }
 
+  function handleSubmitForm() {
+    handleSubmit(handleCreateGoal)
+  }
+
   return (
     <DialogContent>
       <div className="h-full flex flex-col gap-6">
@@ -101,7 +105,7 @@ export function CreateGoal() {
                     onValueChange={field.onChange}
                     value={String(field.value)}>
                     {desiredWeeklyFrequencyIcon.map((icon, index) => (
-                      <RadioGroupItem value={String(index + 1)}>
+                      <RadioGroupItem key={index} value={String(index + 1)}>
                         <RadioGroupIndicator />
                         <span className="text-zinc-300 text-sm font-medium leading-none">
                           {index + 1}x na semana
