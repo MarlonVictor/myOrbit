@@ -7,7 +7,7 @@ import { Button } from './ui/button'
 
 export function EmptyGoals() {
   return (
-    <main className="h-screen flex flex-col items-center justify-center gap-8">
+    <main className="h-screen flex flex-col items-center justify-center gap-8 px-5">
       <img src={logo} alt="my.orbit" />
 
       <img src={letsStart} alt="Lets start" />
@@ -19,7 +19,7 @@ export function EmptyGoals() {
       </p>
 
       <DialogTrigger asChild>
-        <Button>
+        <Button className="w-full sm:w-auto">
           <Plus className="size-4" />
           Cadastrar meta
         </Button>

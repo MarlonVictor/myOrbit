@@ -1,7 +1,9 @@
 import { X } from 'lucide-react'
+import { useRef } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import { useQueryClient } from '@tanstack/react-query'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 import { Button } from './ui/button'
 import {
@@ -18,7 +20,6 @@ import {
   RadioGroupItem,
 } from './ui/radio-group'
 import { createGoals } from '../http/create-goal'
-import { useQueryClient } from '@tanstack/react-query'
 
 const createGoalSchema = z.object({
   title: z.string().min(1, 'Informe a atividade que deseja praticar'),
@@ -28,6 +29,7 @@ const createGoalSchema = z.object({
 type CreateGoalSchema = z.infer<typeof createGoalSchema>
 
 export function CreateGoal() {
+  const closeModalButton = useRef(null)
   const queryClient = useQueryClient()
 
   const desiredWeeklyFrequencyIcon = ['🥱', '🙂', '😎', '😜', '🤨', '🤯', '🔥']
@@ -52,10 +54,11 @@ export function CreateGoal() {
 
     queryClient.invalidateQueries({ queryKey: ['pending-goals'] })
     queryClient.invalidateQueries({ queryKey: ['summary'] })
-  }
 
-  function handleSubmitForm() {
-    handleSubmit(handleCreateGoal)
+    if (closeModalButton.current) {
+      // @ts-expect-error not type 'never'
+      closeModalButton.current.click()
+    }
   }
 
   return (
@@ -121,7 +124,11 @@ export function CreateGoal() {
 
           <div className="flex items-center gap-3">
             <DialogClose asChild>
-              <Button type="button" className="flex-1" variant="secondary">
+              <Button
+                ref={closeModalButton}
+                type="button"
+                className="flex-1"
+                variant="secondary">
                 Fechar
               </Button>
             </DialogClose>

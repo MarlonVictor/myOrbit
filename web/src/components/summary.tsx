@@ -1,5 +1,5 @@
 import { CheckCircle2, Plus } from 'lucide-react'
-import { QueryClient, useQuery } from '@tanstack/react-query'
+import { useQueryClient, useQuery } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import 'dayjs/locale/pt-br'
 
@@ -17,7 +17,7 @@ import letsStart from '../assets/illustration-lets-start.svg'
 dayjs.locale('pt-br')
 
 export function Summary() {
-  const queryClient = new QueryClient()
+  const queryClient = useQueryClient()
 
   const { data } = useQuery({
     queryKey: ['summary'],
@@ -41,7 +41,7 @@ export function Summary() {
 
   return (
     <main className="py-10 px-5 mx-auto flex flex-col gap-6 max-w-[480px]">
-      <div className="flex items-center justify-between">
+      <div className="flex sm:items-center justify-between flex-col sm:flex-row gap-4">
         <div className="flex items-center gap-3">
           <MyOrbitIcon />
           <span className="text-lg font-semibold capitalize">
@@ -100,8 +100,8 @@ export function Summary() {
                       const time = dayjs(goal.createdAt).format('HH:mm')
 
                       return (
-                        <li key={goal.id} className="flex items-center gap-2">
-                          <CheckCircle2 className="size-4 text-secondary-light" />
+                        <li key={goal.id} className="flex gap-2">
+                          <CheckCircle2 className="size-4 text-secondary-light shrink-0 translate-y-0.5" />
                           <span className="text-sm text-zinc-400">
                             Você completou "
                             <span className="text-zinc-100">{goal.title}</span>"
@@ -109,7 +109,7 @@ export function Summary() {
                           </span>
                           <button
                             type="button"
-                            className="text-zinc-500 hover:text-zinc-400 transition-colors text-xs underline underline-offset-2 ml-2"
+                            className="h-max text-zinc-500 hover:text-zinc-400 transition-colors text-xs underline underline-offset-2 ml-2 translate-y-0.5"
                             onClick={() => handleDeleteGoalCompletion(goal.id)}>
                             Desfazer
                           </button>
@@ -123,9 +123,13 @@ export function Summary() {
           </>
         ) : (
           <>
-            <img src={letsStart} alt="Lets start" />
+            <img
+              src={letsStart}
+              alt="Lets start"
+              className="w-3/4 sm:w-full mx-auto"
+            />
 
-            <p className="text-zinc-300 leading-relaxed max-w text-center">
+            <p className="text-zinc-300 leading-relaxed max-w text-center text-sm sm:text-md">
               Você ainda não cumpriu nenhuma meta!!
             </p>
           </>
