@@ -42,7 +42,7 @@ export function AlertDialogContent(
 
       <AlertDialogPrimitive.AlertDialogContent
         {...props}
-        className="fixed z-50 inset-0 m-auto w-[500px] !h-max border rounded-lg border-zinc-700 bg-neutral-90 p-8"
+        className="fixed z-50 inset-0 m-auto w-4/5 sm:w-[500px] !h-max border rounded-lg border-zinc-700 bg-neutral-90 p-8"
       />
     </AlertDialogPortal>
   )

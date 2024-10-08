@@ -31,12 +31,12 @@ export function Summary() {
 
   const completedPercentage = Math.round((data?.completed * 100) / data.total)
 
-  // async function handleDeleteGoalCompletion(goalId: string) {
-  //   await deleteGoalCompletion(goalId)
+  function handleSetGoalIdOnParams(goalId: string) {
+    const url = new URL(window.location.href)
+    url.searchParams.set('goal', goalId)
 
-  //   queryClient.invalidateQueries({ queryKey: ['summary'] })
-  //   queryClient.invalidateQueries({ queryKey: ['pending-goals'] })
-  // }
+    window.history.pushState({}, '', url)
+  }
 
   return (
     <AlertDialog>
@@ -100,7 +100,7 @@ export function Summary() {
                         const time = dayjs(goal.createdAt).format('HH:mm')
 
                         return (
-                          <li key={goal.id} className="flex gap-2">
+                          <li key={goal.id} className="flex flex-row gap-2">
                             <CheckCircle2 className="size-4 text-secondary-light shrink-0 translate-y-0.5" />
                             <span className="text-sm text-zinc-400">
                               Você completou "
@@ -114,14 +114,9 @@ export function Summary() {
                               <button
                                 type="button"
                                 className="h-max text-zinc-500 hover:text-zinc-400 transition-colors text-xs underline underline-offset-2 ml-2 translate-y-0.5"
-                                onClick={() => {
-                                  // handleDeleteGoalCompletion(goal.id)
-                                  const url = new URL(window.location.href) // Pega a URL atual
-                                  url.searchParams.set('goal', goal.id) // Define ou atualiza o parâmetro
-
-                                  // Atualiza a URL sem recarregar a página
-                                  window.history.pushState({}, '', url)
-                                }}>
+                                onClick={() =>
+                                  handleSetGoalIdOnParams(goal.id)
+                                }>
                                 Desfazer
                               </button>
                             </AlertDialogTrigger>
