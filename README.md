@@ -20,8 +20,8 @@
 
 <p align="center">
     <!-- ../.github/example.png -->
-    <img src=".github/create-goal.png" alt="Create Goal" width="500px">
-    <img src=".github/summary-list.png" alt="SUmmary List" width="500px">
+    <img src=".github/create-goal.png" alt="Create Goal" width="100%">
+    <img src=".github/summary-list.png" alt="SUmmary List" width="100%">
 </p>
 
 <h2 id="technologies">💻 Technologies</h2>
